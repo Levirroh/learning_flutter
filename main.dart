@@ -31,7 +31,7 @@ class Jogo {
         plataforma = plataforma,
         // TODO 1:
         // Calcular o preço final aplicando o percentual de desconto.
-        preco = precoOriginal;
+        preco = precoOriginal - (precoOriginal * (percentualDesconto/100));
 }
 
 class ItemCarrinho {
