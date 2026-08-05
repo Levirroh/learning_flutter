@@ -79,19 +79,19 @@ class Pedido {
   // Caso contrário, o frete custa R$ 20,00.
   double get valorDoFrete => subtotalDosItens >= 250 ? 0 : 20.0;
 
-  // TODO 6:
+  // DONE 6:
   // subtotalDosItens - valorDoDesconto + valorDoFrete
   double get totalFinal => subtotalDosItens - valorDoDesconto + valorDoFrete;
 
-  // TODO 7:
+  // DONE 7:
   // Menor que 150: Pedido econômico
   // De 150 até 300: Pedido padrão
   // Maior que 300: Pedido premium
   String get classificacao => subtotalDosItens > 300.0 ? "Pedido premium" : subtotalDosItens >= 150.0 ? "Pedido padrão" : "Pedido econômico";
 
-  // TODO 8:
+  // DONE 8:
   // Somar as quantidades de todos os itens.
-  int get quantidadeTotalDeUnidades => 0;
+  int get quantidadeTotalDeUnidades => itens.fold(0, (previousValue, element) => previousValue + element.quantidade);
 }
 
 void imprimirRecibo(Pedido pedido) {
