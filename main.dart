@@ -96,7 +96,15 @@ class Pedido {
 
 void imprimirRecibo(Pedido pedido) {
 // Estrutura de impressão de recibo
-  
+  print("=======================================");
+  print("             GAMESTORE DART            ");
+  print("=======================================");
+  print("");
+  print("Cliente: " + pedido.cliente);
+  print("Cupom: ${pedido.cupom}");
+  print("");
+  print("DETALHES DO PEDIDO");
+  print("");
 }
 
 void main() {
