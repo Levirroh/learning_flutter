@@ -51,7 +51,7 @@ class ItemCarrinho {
 
   // DONE 2:
   // Retornar preço do jogo × quantidade, aplicando o desconto extra.
-  double get subtotal => (this.jogo.preco * quantidade) - descontoExtra;
+  double get subtotal => (this.jogo.preco * this.quantidade) - this.descontoExtra;
 }
 
 class Pedido {
@@ -69,10 +69,10 @@ class Pedido {
   // Somar o subtotal de todos os itens.
   double get subtotalDosItens => 0;
 
-  // TODO 4:
+  // DONE 4:
   // Retornar 10% do subtotal quando o cupom for ALUNO10.
   // A comparação deve ignorar letras maiúsculas e minúsculas.
-  double get valorDoDesconto => 0;
+  double get valorDoDesconto => cupom?.toLowerCase() == "aluno10" ? (subtotalDosItens / 10) : 0;
 
   // TODO 5:
   // Frete grátis para subtotal igual ou maior que R$ 250,00.
