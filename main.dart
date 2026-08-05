@@ -81,7 +81,7 @@ class Pedido {
 
   // TODO 6:
   // subtotalDosItens - valorDoDesconto + valorDoFrete
-  double get totalFinal => 0;
+  double get totalFinal => subtotalDosItens - valorDoDesconto + valorDoFrete;
 
   // TODO 7:
   // Menor que 150: Pedido econômico
