@@ -87,7 +87,7 @@ class Pedido {
   // Menor que 150: Pedido econômico
   // De 150 até 300: Pedido padrão
   // Maior que 300: Pedido premium
-  String get classificacao => '';
+  String get classificacao => subtotalDosItens > 300.0 ? "Pedido premium" : subtotalDosItens >= 150.0 ? "Pedido padrão" : "Pedido econômico";
 
   // TODO 8:
   // Somar as quantidades de todos os itens.
