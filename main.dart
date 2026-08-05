@@ -29,7 +29,7 @@ class Jogo {
         ),
         titulo = titulo,
         plataforma = plataforma,
-        // TODO 1:
+        // DONE 1:
         // Calcular o preço final aplicando o percentual de desconto.
         preco = precoOriginal - (precoOriginal * (percentualDesconto/100));
 }
