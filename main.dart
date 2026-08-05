@@ -49,9 +49,9 @@ class ItemCarrinho {
           'O desconto extra deve estar entre 0 e 50.',
         );
 
-  // TODO 2:
+  // DONE 2:
   // Retornar preço do jogo × quantidade, aplicando o desconto extra.
-  double get subtotal => 0;
+  double get subtotal => (this.jogo.preco * quantidade) - descontoExtra;
 }
 
 class Pedido {
