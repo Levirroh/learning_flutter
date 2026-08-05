@@ -72,12 +72,12 @@ class Pedido {
   // DONE 4:
   // Retornar 10% do subtotal quando o cupom for ALUNO10.
   // A comparação deve ignorar letras maiúsculas e minúsculas.
-  double get valorDoDesconto => cupom?.toLowerCase() == "aluno10" ? (subtotalDosItens / 10) : 0;
+  double get valorDoDesconto => cupom?.toLowerCase() == "aluno10" ? (subtotalDosItens / 10) : 0.0;
 
-  // TODO 5:
+  // DONE 5:
   // Frete grátis para subtotal igual ou maior que R$ 250,00.
   // Caso contrário, o frete custa R$ 20,00.
-  double get valorDoFrete => 0;
+  double get valorDoFrete => subtotalDosItens >= 250 ? 0 : 20.0;
 
   // TODO 6:
   // subtotalDosItens - valorDoDesconto + valorDoFrete
