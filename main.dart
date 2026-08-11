@@ -51,8 +51,7 @@ class ItemCarrinho {
 
   // DONE 2:
   // Retornar preço do jogo × quantidade, aplicando o desconto extra.
-  double get subtotal => (this.jogo.preco * this.quantidade) - this.descontoExtra;
-}
+  double get subtotal => (jogo.preco * quantidade) - (jogo.preco * quantidade * (descontoExtra / 100));}
 
 class Pedido {
   final String cliente;
@@ -67,7 +66,7 @@ class Pedido {
 
   // TODO 3:
   // Somar o subtotal de todos os itens.
-  double get subtotalDosItens => 0;
+  double get subtotalDosItens => itens.fold(0.0, (total, item) => total + item.subtotal);
 
   // DONE 4:
   // Retornar 10% do subtotal quando o cupom for ALUNO10.
@@ -95,16 +94,47 @@ class Pedido {
 }
 
 void imprimirRecibo(Pedido pedido) {
-// Estrutura de impressão de recibo
-  print("=======================================");
-  print("             GAMESTORE DART            ");
-  print("=======================================");
-  print("");
-  print("Cliente: " + pedido.cliente);
-  print("Cupom: ${pedido.cupom}");
-  print("");
-  print("DETALHES DO PEDIDO");
-  print("");
+  print("========================================");
+  print("             GAMESTORE DART             ");
+  print("========================================");
+  print("Cliente: ${pedido.cliente}");
+  print("Cupom: ${pedido.cupom}\n");
+  print("ITENS DO PEDIDO\n");
+
+  for (int i = 0; i < pedido.itens.length; i++) {
+    final item = pedido.itens[i];
+
+    print("${i + 1}. ${item.jogo.titulo}");
+    print("Plataforma: ${item.jogo.plataforma}");
+    print("Preço unitário: R\$ ${item.jogo.preco.toStringAsFixed(2)}");
+    print("Quantidade: ${item.quantidade}");
+    print("Desconto extra: ${item.descontoExtra.toStringAsFixed(0)}%");
+    print("Subtotal: R\$ ${item.subtotal.toStringAsFixed(2)}");
+    print("----------------------------------------");
+  }
+
+  print(
+    "Subtotal dos itens: R\$ ${pedido.subtotalDosItens.toStringAsFixed(2)}",
+  );
+
+  print(
+    "Desconto do cupom: R\$ ${pedido.valorDoDesconto.toStringAsFixed(2)}",
+  );
+
+  if (pedido.valorDoFrete == 0) {
+    print("Frete: GRÁTIS \n");
+  } else {
+    print("Frete: R\$ ${pedido.valorDoFrete.toStringAsFixed(2)} \n");
+  }
+
+  print(
+    "TOTAL FINAL: R\$ ${pedido.totalFinal.toStringAsFixed(2)}",
+  );
+
+  print("Classificação: ${pedido.classificacao} \n");
+  print("Quantidade de produtos diferentes: ${pedido.itens.length}");
+  print("Quantidade total de unidades: ${pedido.quantidadeTotalDeUnidades}");
+  print("========================================");
 }
 
 void main() {
