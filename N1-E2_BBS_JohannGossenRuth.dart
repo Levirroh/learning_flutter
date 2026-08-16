@@ -113,10 +113,10 @@ void imprimirMenu(Bbs bbs) {
   // [2] GAMES       - 2 mensagens
 
   print("ÁREAS DISPONÍVEIS");
-  print("[1] - GERAL       - ${bbs.mensagensDaArea("GERAL")}");
-  print("[2] - GAMES       - ${bbs.mensagensDaArea("GAMES")}");
-  print("[3] - TECNOLOGIA  - ${bbs.mensagensDaArea("TECNOLOGIA")}");
-  print("[4] - DOWNLOADS   - ${bbs.mensagensDaArea("DOWNLOADS")} \n");
+  print("[1] - GERAL       - ${bbs.mensagensDaArea("GERAL").length} ${bbs.mensagensDaArea("GERAL").length > 1 ? "mensagens" : "mensagem"}");
+  print("[2] - GAMES       - ${bbs.mensagensDaArea("GAMES").length} ${bbs.mensagensDaArea("GAMES").length > 1 ? "mensagens" : "mensagem"}");
+  print("[3] - TECNOLOGIA  - ${bbs.mensagensDaArea("TECNOLOGIA").length} ${bbs.mensagensDaArea("TECNOLOGIA").length > 1 ? "mensagens" : "mensagem"}");
+  print("[4] - DOWNLOADS   - ${bbs.mensagensDaArea("DOWNLOADS").length} ${bbs.mensagensDaArea("DOWNLOADS").length > 1 ? "mensagens" : "mensagem"}");
 }
 
 void imprimirArea(Bbs bbs, String area) {
@@ -130,17 +130,16 @@ void imprimirArea(Bbs bbs, String area) {
   //     por: Raven | visualizações: 42
 
   final mensagens = bbs.mensagensDaArea(area);
-  for (int i = 0; i <= mensagens.length; i++) {
+  for (int i = 0; i <= mensagens.length -1; i++) {
     final mensagemAtual = mensagens[i];
     print("=== ÁREA: ${area} ===");
     print(
-      "#${mensagemAtual.id.toString().padLeft(3, "0")} ${mensagemAtual.nova ? "[NOVO] " : ""} ${mensagemAtual.titulo} \n",
+      "#${mensagemAtual.id.toString().padLeft(3, "0")} ${mensagemAtual.nova ? "[NOVO] " : ""} ${mensagemAtual.titulo}",
     );
     print(
       "    por: ${mensagemAtual.autor} | visualizações: ${mensagemAtual.visualizacoes}",
     );
   }
-  print("");
 }
 
 void imprimirMensagem(Bbs bbs, int id) {
@@ -151,11 +150,13 @@ void imprimirMensagem(Bbs bbs, int id) {
   final mensagem = bbs.buscarMensagem(id);
 
   if (mensagem != null) {
-    print("=== MENSAGEM #${mensagem.id.toString().padLeft(3, "0")}} ===");
+    print("=== MENSAGEM #${mensagem.id.toString().padLeft(3, "0")} ===");
     print("Título: ${mensagem.titulo}");
     print("Autor: ${mensagem.autor}");
     print("Área: ${mensagem.area}");
     print("Visualizações: ${mensagem.visualizacoes}");
+    print("------------------------------------------");
+    print("${mensagem.conteudo}");
   }
 }
 
@@ -168,6 +169,14 @@ void imprimirEstatisticas(Bbs bbs) {
   // - total de visualizações
   //
   // Todos os valores devem ser calculados.
+
+    print("=== ESTATÍSTICAS ===");
+    print("Áreas: ${bbs.areas.length}");
+    print("Mensagens: ${bbs.totalMensagens}");
+    print("Mensagens novas: ${bbs.mensagensNovas}");
+    print("Visualizações: ${bbs.totalVisualizacoes}");
+  
+  
 }
 
 void main() {
