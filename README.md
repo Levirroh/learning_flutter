@@ -1,22 +1,20 @@
 # learning_flutter
 initial flutter repo, based on college provided content. 
 
-
-# Ideia mini jogos
-1. Jogo de 2 para competir quantos clica mais em cada lado da tela. (simples)
-2. Jogo estilo pou de andar de carrinho e tentar não tombar. (médio/pode ser complexo)
-3. Campo minado (médio).
-4. Jogo de reação (simples) (troca a cor de fundo e tem que clicar o mais rápido possível).
-5. Jogo de brick breaker (médio/pode ser complexo).
-6. Jogo de balão indo pra cima estilo "Rise Up" (ballon game).
-7. 
-
 # Ideia app autoral
 
 ## App de gravação em loop personalizado de áudio.
 
  Aplicativo simples com uma interface direta.
  - Possibilidade de gravar diferentes faixas de áudio e a possibilidade de tocar elas em loop (todas ou somente selecionadas).
+
+3 páginas (mínimo obrigatório):
+1. Página com toda a edição do áudio (desde criar até salvar ele)
+2. Página com os "projetos feitos" ou "loops criados".
+3. Página estilo biblioteca ou favoritos (não todos os sons já feitos, mas se eu gostar de uma faixa de áudio específica eu posso só "favoritar" ela pra reutilizar em outra)
+
+
+
 
 
 # Setting Up:
