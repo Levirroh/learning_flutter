@@ -64,7 +64,7 @@ class _MainScreenState extends State<MainScreen> {
 
       hoursPlayed: 23,
       userRating: 8,
-      userReview: "BBBB.",
+      userReview: "Legal, muito bom pra quem gosta de lore confusa.",
     ),
 
     Game(
@@ -88,7 +88,7 @@ class _MainScreenState extends State<MainScreen> {
 
       hoursPlayed: 40,
       userRating: 9,
-      userReview: "CCCC.",
+      userReview: "Não jogue à noite.",
     ),
 
     Game(
@@ -116,7 +116,7 @@ class _MainScreenState extends State<MainScreen> {
 
       hoursPlayed: 30,
       userRating: 10,
-      userReview: "DDDD.",
+      userReview: "Bom pra caralho, a experiência de ativar o modo personalizado de ser um rato + ter um caracol imortal atrás de você enquanto você investiga crimes, tem que ser uma das experiências mais fortes do mundo.",
     ),
 
     Game(
@@ -141,7 +141,7 @@ class _MainScreenState extends State<MainScreen> {
 
       hoursPlayed: 33,
       userRating: 7,
-      userReview: "EEEE.",
+      userReview: "Jogo bom, mas a lore consegue ser pior que o primeiro, além de ser muito confuso, mas eu ri muito várias vezes.",
     ),
 
     Game(
@@ -165,7 +165,7 @@ class _MainScreenState extends State<MainScreen> {
 
       hoursPlayed: 26,
       userRating: 10,
-      userReview: "FFFF.",
+      userReview: "Muito bom, jogo fácil de ficar lá por horas jogando e não perceber, early acess, então eu passo pano pra algumas coisas, mas tem menos bug que a maioria dos jogos já.",
     ),
 
     Game(
@@ -190,7 +190,7 @@ class _MainScreenState extends State<MainScreen> {
 
       hoursPlayed: 119,
       userRating: 9,
-      userReview: "GGGG.",
+      userReview: "Jogasso, não tem muito o que falar, só dei 9 invés de 10 pq fiquei com vontade mesmo.",
     ),
 
     Game(
@@ -215,7 +215,7 @@ class _MainScreenState extends State<MainScreen> {
 
       hoursPlayed: 63,
       userRating: 9,
-      userReview: "HHHHH.",
+      userReview: "Loucura que já faz muito tempo que esse jogo lançou, e tu ainda consegue sair voando 800 metros acima da água com 2 comandos ao mesmo tempo.",
     ),
   ];
 

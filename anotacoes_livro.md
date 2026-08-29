@@ -37,3 +37,40 @@ Dart nasceu e continua *Open Source*.
 
 Ecossistema Dart: ![alt text](ecossistemaDart.png).
 
+
+## O básico
+
+Operadores e Estruturas de controle:
+
+Operadores:
+
+- (+,-, *, /, ~/, %), (==, !=, > / >=, < / <=), (&&, ||, !()), 
+- (&, |, ^, ~, <<, >>, >>>) ->  (AND, OR, XOR, NOT, Deslocamento de bit para a esquerda, para a direta, deslocamento de bit para a direta sem signal (unsigned))
+imagens de referência: ![deslocamento direita e esquerda]({459063EF-28CB-49F1-BD70-11D346428CBE}.png) | ![deslocamento sem sinal]({B6A2D989-F9E5-46C9-8A8E-8537C35E9478}.png)
+- (= , +=, -=, *=, /=, ~/=, %=, &=, |=, <<=, >>=, >>>=)
+- (var++, var--, --var: diminui um antes de usar a variável, ++var: diminui um antes de usar a variável) -> ()
+- (as, is, is!) - (41 as/is/!is String)
+- (., (), .., ..., a ? b : c, [])
+- (??, ??=, ?., ?.., ?[], expression!)
+- ![geral]({5113AEFC-06B7-4B07-88A9-BFA075D2C7C3}.png)
+
+Estruturas de controle
+
+- if / else
+- switch / case
+- while
+- do while
+- for
+- for in (for vogal in vogais)
+- assert
+
+
+## Benditos tipos:
+
+Symbol: 
+var mod = #modificador
+print(#modificador); // Symbol("modificador")
+print(mod); //Symbol("modificador")
+
+
+
