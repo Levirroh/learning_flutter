@@ -210,7 +210,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       game: recommendedGame!,
                                       rating: recommendedGame!.userRating,
                                       hoursPlayed: recommendedGame!.hoursPlayed,
-                                      onTap: (){
+                                      onTap: () {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -264,9 +264,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                                         if (game != null) {
                                           widget.onAddGame(game);
-
                                           setState(() {
-                                            recommendedNewGame = null;
+                                            recommendedGame = null;
                                           });
                                         }
                                       },

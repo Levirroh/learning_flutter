@@ -563,7 +563,12 @@ class _MainScreenState extends State<MainScreen> {
       onUpdateGame: updateGame,
     ),
 
-    DashboardScreen(totalHours: totalHours, games: userGames, allGames: allGames, onAddGame: (Game value) {  },),
+    DashboardScreen(
+      totalHours: totalHours,
+      games: userGames,
+      allGames: allGames,
+      onAddGame: addGame,
+    ),
 
     ChartStatisticsScreen(games: userGames),
   ];
