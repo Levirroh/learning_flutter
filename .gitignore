@@ -1,0 +1,5 @@
+/faixa_09/build\*
+faixa_09/looper/.dart_tool/*
+faixa_09/looper/android/*
+faixa_09/looper/windows/*
+faixa_09/looper/build/*

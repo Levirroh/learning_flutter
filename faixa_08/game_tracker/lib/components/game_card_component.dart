@@ -43,7 +43,7 @@ class GameCardComponent extends StatelessWidget {
                     spacing: 6,
                     children: [
                       ...game.platform.take(2).map((platform) {
-                        return _PlatformBadge(platform: platform);
+                        return PlatformBadge(platform: platform);
                       }),
 
                       if (game.platform.length > 2)
@@ -110,7 +110,7 @@ class GameCardComponent extends StatelessWidget {
                         const Spacer(),
 
                         Text(
-                          _mainCategory(),
+                          mainCategory(),
                           style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(fontWeight: FontWeight.w500),
                         ),
@@ -126,7 +126,7 @@ class GameCardComponent extends StatelessWidget {
     );
   }
 
-  String _mainCategory() {
+  String mainCategory() {
     if (game.categories.isEmpty) {
       return "Sem gênero";
     }
@@ -137,8 +137,8 @@ class GameCardComponent extends StatelessWidget {
   }
 }
 
-class _PlatformBadge extends StatelessWidget {
-  const _PlatformBadge({required this.platform});
+class PlatformBadge extends StatelessWidget {
+  const PlatformBadge({super.key, required this.platform});
 
   final GamePlatformEnum platform;
 
@@ -153,10 +153,10 @@ class _PlatformBadge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(_platformIcon(), color: Colors.white, size: 14),
+          Icon(platformIcon(), color: Colors.white, size: 14),
           const SizedBox(width: 4),
           Text(
-            _platformName(),
+            platformName(),
             style: const TextStyle(
               color: Colors.white,
               fontSize: 11,
@@ -168,7 +168,7 @@ class _PlatformBadge extends StatelessWidget {
     );
   }
 
-  IconData _platformIcon() {
+  IconData platformIcon() {
     switch (platform) {
       case GamePlatformEnum.pc:
         return Icons.computer;
@@ -180,7 +180,7 @@ class _PlatformBadge extends StatelessWidget {
     }
   }
 
-  String _platformName() {
+  String platformName() {
     switch (platform) {
       case GamePlatformEnum.pc:
         return "PC";

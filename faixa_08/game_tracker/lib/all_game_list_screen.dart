@@ -20,14 +20,14 @@ class AllGameListScreen extends StatefulWidget {
 }
 
 class _AllGameListScreenState extends State<AllGameListScreen> {
-  bool _isUserGame(Game game) {
+  bool getIsUserGame(Game game) {
     return widget.userGames.any(
       (userGame) => userGame.name == game.name,
     );
   }
 
-  Game _getGameDetails(Game game) {
-    if (_isUserGame(game)) {
+  Game getGameDetails(Game game) {
+    if (getIsUserGame(game)) {
       return widget.userGames.firstWhere(
         (userGame) => userGame.name == game.name,
       );
@@ -54,7 +54,7 @@ class _AllGameListScreenState extends State<AllGameListScreen> {
           ),
           itemBuilder: (context, index) {
             final game = widget.allGames[index];
-            final isUserGame = _isUserGame(game);
+            final isUserGame = getIsUserGame(game);
 
             return GameCardComponent(
               game: game,
@@ -64,7 +64,7 @@ class _AllGameListScreenState extends State<AllGameListScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => GameDetailsScreen(
-                      game: _getGameDetails(game),
+                      game: getGameDetails(game),
                       isUserGame: isUserGame,
                       showAddButton: true,
                     ),

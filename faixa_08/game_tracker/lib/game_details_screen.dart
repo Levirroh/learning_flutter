@@ -36,7 +36,7 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
     super.dispose();
   }
 
-  void _increaseHours() {
+  void increaseHours() {
     setState(() {
       widget.game.hoursPlayed++;
     });
@@ -44,7 +44,7 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
     widget.onGameUpdated?.call(widget.game);
   }
 
-  void _decreaseHours() {
+  void decreaseHours() {
     if (widget.game.hoursPlayed <= 0) {
       return;
     }
@@ -56,7 +56,7 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
     widget.onGameUpdated?.call(widget.game);
   }
 
-  void _increaseRating() {
+  void increaseRating() {
     if (widget.game.userRating >= 10) {
       return;
     }
@@ -68,7 +68,7 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
     widget.onGameUpdated?.call(widget.game);
   }
 
-  void _decreaseRating() {
+  void decreaseRating() {
     if (widget.game.userRating <= 0) {
       return;
     }
@@ -80,7 +80,7 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
     widget.onGameUpdated?.call(widget.game);
   }
 
-  void _saveReview() {
+  void saveReview() {
     setState(() {
       widget.game.userReview = reviewController.text;
     });
@@ -161,8 +161,8 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                         icon: Icons.star,
                         title: "Sua avaliação",
                         value: game.userRating.toString(),
-                        onDecrease: _decreaseRating,
-                        onIncrease: _increaseRating,
+                        onDecrease: decreaseRating,
+                        onIncrease: increaseRating,
                         canDecrease: game.userRating > 0,
                         canIncrease: game.userRating < 10,
                       ),
@@ -175,8 +175,8 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                         icon: Icons.schedule,
                         title: "Tempo jogado",
                         value: "${game.hoursPlayed}h",
-                        onDecrease: _decreaseHours,
-                        onIncrease: _increaseHours,
+                        onDecrease: decreaseHours,
+                        onIncrease: increaseHours,
                         canDecrease: game.hoursPlayed > 0,
                       ),
                     ),
@@ -251,7 +251,7 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: FilledButton.icon(
-                    onPressed: _saveReview,
+                    onPressed: saveReview,
                     icon: const Icon(Icons.save),
                     label: const Text("Salvar análise"),
                   ),
