@@ -15,11 +15,7 @@ abstract class AppColors {
   static const Color textColorDone = Color(0xFF258E3F);
 }
 
-enum TaskState {
-  toDo,
-  doing,
-  done,
-}
+enum TaskState { toDo, doing, done }
 
 extension TaskStateDecoration on TaskState {
   Color get backgroundColor {
@@ -79,6 +75,11 @@ final List<Task> tasks = [
     state: TaskState.toDo,
   ),
   Task(
+    title: "Atividade Segunda",
+    description: "Fazer o bgl do xavier do projeto A",
+    state: TaskState.toDo,
+  ),
+  Task(
     title: "Conectar com o banco do cliente",
     description:
         "Realizar conexão via AnyDesk e conectar ao dataconnect da Goalfy",
@@ -91,6 +92,18 @@ final List<Task> tasks = [
     state: TaskState.done,
   ),
 ];
+
+class Task {
+  final String description;
+  final String title;
+  final TaskState state;
+
+  const Task({
+    required this.description,
+    required this.title,
+    required this.state,
+  });
+}
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -138,35 +151,17 @@ class _MainScreenState extends State<MainScreen> {
         onPressed: () {},
         shape: const CircleBorder(),
         backgroundColor: AppColors.primary,
-        child: const Icon(
-          Icons.add,
-          color: AppColors.secondary,
-        ),
+        child: const Icon(Icons.add, color: AppColors.secondary),
       ),
     );
   }
-}
-
-class Task {
-  final String description;
-  final String title;
-  final TaskState state;
-
-  const Task({
-    required this.description,
-    required this.title,
-    required this.state,
-  });
 }
 
 class _TaskList extends StatelessWidget {
   final SliverGridDelegate gridDelegate;
   final List<Task> tasks;
 
-  const _TaskList({
-    required this.gridDelegate,
-    required this.tasks,
-  });
+  const _TaskList({required this.gridDelegate, required this.tasks});
 
   @override
   Widget build(BuildContext context) {
