@@ -12,108 +12,25 @@ abstract class AppColors {
   static const Color textSecondary = Color(0xFFAFAFAF);
 
   static const Color divider = Color(0xFF3A3A3A);
-
-  static const Color colorDone = Color(0xFFBFE59A);
-  static const Color colorDoing = Color(0xFFAEBDEA);
-  static const Color colorToDo = Color(0xFFEAEAAE);
-
-  static const Color textColorToDo = Color(0xFF8E7D25);
-  static const Color textColorDoing = Color(0xFF253F8E);
-  static const Color textColorDone = Color(0xFF258E3F);
-}
-
-enum TaskState {
-  toDo,
-  doing,
-  done,
-}
-
-enum TaskFilter {
-  all,
-  toDo,
-  doing,
-  done,
-}
-
-extension TaskStateDecoration on TaskState {
-  Color get color {
-    switch (this) {
-      case TaskState.toDo:
-        return AppColors.colorToDo;
-
-      case TaskState.doing:
-        return AppColors.colorDoing;
-
-      case TaskState.done:
-        return AppColors.colorDone;
-    }
-  }
-
-  Color get textColor {
-    switch (this) {
-      case TaskState.toDo:
-        return AppColors.textColorToDo;
-
-      case TaskState.doing:
-        return AppColors.textColorDoing;
-
-      case TaskState.done:
-        return AppColors.textColorDone;
-    }
-  }
-
-  String get label {
-    switch (this) {
-      case TaskState.toDo:
-        return "A fazer";
-
-      case TaskState.doing:
-        return "Fazendo";
-
-      case TaskState.done:
-        return "Concluída";
-    }
-  }
-}
-
-extension TaskFilterDecoration on TaskFilter {
-  String get label {
-    switch (this) {
-      case TaskFilter.all:
-        return "Todas";
-
-      case TaskFilter.toDo:
-        return "A fazer";
-
-      case TaskFilter.doing:
-        return "Fazendo";
-
-      case TaskFilter.done:
-        return "Concluídas";
-    }
-  }
+  static const Color done = Color(0xFFBFE59A);
 }
 
 class Task {
   final String title;
-  final String description;
-  final TaskState state;
+  final bool completed;
 
   const Task({
     required this.title,
-    required this.description,
-    required this.state,
+    this.completed = false,
   });
 
   Task copyWith({
     String? title,
-    String? description,
-    TaskState? state,
+    bool? completed,
   }) {
     return Task(
       title: title ?? this.title,
-      description: description ?? this.description,
-      state: state ?? this.state,
+      completed: completed ?? this.completed,
     );
   }
 }
@@ -126,378 +43,319 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  TaskFilter selectedFilter = TaskFilter.all;
+  final TextEditingController taskController = TextEditingController();
 
-  List<Task> tasks = [
-    const Task(
-      title: "Prova Cálculo",
-      description: "Preciso estudar pra prova de cálculo N2",
-      state: TaskState.toDo,
-    ),
-    const Task(
-      title: "Atividade Segunda",
-      description: "Fazer o bgl do xavier do projeto A",
-      state: TaskState.toDo,
-    ),
-    const Task(
-      title: "Conectar com o banco do cliente",
-      description:
-          "Realizar conexão via AnyDesk e conectar ao dataconnect da Goalfy",
-      state: TaskState.doing,
-    ),
-    const Task(
-      title: "Notificações PinguIn",
-      description:
-          "Criar sistema de notificações e notificações push para o PinguIn",
-      state: TaskState.done,
-    ),
+  final List<Task> tasks = [
+    Task(title: "Fazer atividade de dispositivos móveis"),
+    Task(title: "Fazer atividade 2 de dispositivos móveis"),
+    Task(title: "Estudar para N2 de cálculo!!!"),
   ];
 
-  List<Task> get filteredTasks {
-    switch (selectedFilter) {
-      case TaskFilter.all:
-        return tasks;
+  List<Task> get orderedTasks {
+    final ordered = [...tasks];
 
-      case TaskFilter.toDo:
-        return tasks
-            .where((task) => task.state == TaskState.toDo)
-            .toList();
+    ordered.sort((a, b) {
+      if (a.completed == b.completed) {
+        return 0;
+      }
 
-      case TaskFilter.doing:
-        return tasks
-            .where((task) => task.state == TaskState.doing)
-            .toList();
+      return a.completed ? 1 : -1;
+    });
 
-      case TaskFilter.done:
-        return tasks
-            .where((task) => task.state == TaskState.done)
-            .toList();
-    }
+    return ordered;
   }
 
   int get pendingTasks {
-    return tasks.where((task) => task.state != TaskState.done).length;
+    return tasks.where((task) => !task.completed).length;
   }
 
-  void toggleTask(Task task) {
-    final index = tasks.indexOf(task);
+  void addTask() {
+    final title = taskController.text.trim();
 
-    if (index == -1) return;
+    if (title.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Digite uma tarefa antes de adicionar.",
+          ),
+        ),
+      );
+
+      return;
+    }
 
     setState(() {
-      final newState =
-          task.state == TaskState.done ? TaskState.toDo : TaskState.done;
+      tasks.add(
+        Task(
+          title: title,
+        ),
+      );
+    });
 
+    taskController.clear();
+
+    FocusScope.of(context).unfocus();
+  }
+
+  void toggleTask(Task task, bool? value) {
+    final index = tasks.indexOf(task);
+
+    if (index == -1) {
+      return;
+    }
+
+    setState(() {
       tasks[index] = task.copyWith(
-        state: newState,
+        completed: value ?? false,
       );
     });
   }
 
+  Future<void> editTask(Task task) async {
+    final editedTask = await showDialog<Task>(
+      context: context,
+      builder: (context) {
+        return TaskDialog(
+          task: task,
+        );
+      },
+    );
+
+    if (editedTask == null) {
+      return;
+    }
+
+    final index = tasks.indexOf(task);
+
+    if (index == -1) {
+      return;
+    }
+
+    setState(() {
+      tasks[index] = editedTask;
+    });
+  }
+
+  @override
+  void dispose() {
+    taskController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final visibleTasks = orderedTasks;
+
     return Scaffold(
       backgroundColor: AppColors.background,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.background,
-        elevation: 4,
-        shape: const CircleBorder(),
-        child: const Icon(
-          Icons.add,
-          size: 30,
+
+      appBar: AppBar(
+        backgroundColor: AppColors.surface,
+        foregroundColor: AppColors.textPrimary,
+        elevation: 0,
+        title: const Text(
+          "Minhas Tarefas",
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
+
       body: SafeArea(
-        child: Column(
-          children: [
-            _Header(
-              pendingTasks: pendingTasks,
-            ),
-            _Filters(
-              selectedFilter: selectedFilter,
-              onFilterSelected: (filter) {
-                setState(() {
-                  selectedFilter = filter;
-                });
-              },
-            ),
-            const SizedBox(height: 8),
-            Expanded(
-              child: filteredTasks.isEmpty
-                  ? const _EmptyTasks()
-                  : ListView.separated(
-                      padding: const EdgeInsets.fromLTRB(
-                        16,
-                        12,
-                        16,
-                        100,
-                      ),
-                      itemCount: filteredTasks.length,
-                      separatorBuilder: (_, _) {
-                        return const SizedBox(height: 10);
-                      },
-                      itemBuilder: (context, index) {
-                        final task = filteredTasks[index];
-
-                        return _TaskItem(
-                          task: task,
-                          onToggle: () {
-                            toggleTask(task);
-                          },
-                        );
-                      },
-                    ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _Header extends StatelessWidget {
-  final int pendingTasks;
-
-  const _Header({
-    required this.pendingTasks,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        20,
-        22,
-        20,
-        16,
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Minhas tarefas",
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  "$pendingTasks tarefas pendentes",
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.more_horiz,
-                color: AppColors.primary,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _Filters extends StatelessWidget {
-  final TaskFilter selectedFilter;
-  final ValueChanged<TaskFilter> onFilterSelected;
-
-  const _Filters({
-    required this.selectedFilter,
-    required this.onFilterSelected,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 42,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: TaskFilter.values.length,
-        separatorBuilder: (_, _) {
-          return const SizedBox(width: 8);
-        },
-        itemBuilder: (context, index) {
-          final filter = TaskFilter.values[index];
-          final selected = filter == selectedFilter;
-
-          return InkWell(
-            onTap: () {
-              onFilterSelected(filter);
-            },
-            borderRadius: BorderRadius.circular(20),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 9,
-              ),
-              decoration: BoxDecoration(
-                color: selected
-                    ? AppColors.primary
-                    : AppColors.surface,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: selected
-                      ? AppColors.primary
-                      : AppColors.divider,
-                ),
-              ),
-              child: Text(
-                filter.label,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: selected
-                      ? AppColors.background
-                      : AppColors.textSecondary,
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class _TaskItem extends StatelessWidget {
-  final Task task;
-  final VoidCallback onToggle;
-
-  const _TaskItem({
-    required this.task,
-    required this.onToggle,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isDone = task.state == TaskState.done;
-
-    return Material(
-      color: AppColors.surface,
-      borderRadius: BorderRadius.circular(16),
-      child: InkWell(
-        onTap: () {},
-        borderRadius: BorderRadius.circular(16),
-        child: Container(
+        child: Padding(
           padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: AppColors.divider,
-            ),
-          ),
-          child: Row(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              GestureDetector(
-                onTap: onToggle,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  margin: const EdgeInsets.only(top: 2),
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: isDone
-                        ? AppColors.primary
-                        : Colors.transparent,
-                    border: Border.all(
-                      width: 2,
-                      color: isDone
-                          ? AppColors.primary
-                          : AppColors.textSecondary,
+              TextField(
+                controller: taskController,
+                cursorColor: AppColors.primary,
+                style: const TextStyle(
+                  color: AppColors.textPrimary,
+                ),
+                decoration: InputDecoration(
+                  labelText: "Nova tarefa",
+                  hintText: "Ex: Estudar Flutter",
+                  labelStyle: const TextStyle(
+                    color: AppColors.textSecondary,
+                  ),
+                  hintStyle: const TextStyle(
+                    color: AppColors.textSecondary,
+                  ),
+                  filled: true,
+                  fillColor: AppColors.surface,
+                  prefixIcon: const Icon(
+                    Icons.task_alt,
+                    color: AppColors.primary,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(
+                      color: AppColors.divider,
                     ),
                   ),
-                  child: isDone
-                      ? const Icon(
-                          Icons.check,
-                          size: 16,
-                          color: AppColors.background,
-                        )
-                      : null,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(
+                      color: AppColors.divider,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(
+                      color: AppColors.primary,
+                      width: 1.5,
+                    ),
+                  ),
+                ),
+                onSubmitted: (_) {
+                  addTask();
+                },
+              ),
+
+              const SizedBox(height: 12),
+
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  onPressed: addTask,
+                  icon: const Icon(
+                    Icons.add,
+                  ),
+                  label: const Text(
+                    "Adicionar",
+                  ),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: AppColors.background,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 14,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
                 ),
               ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      task.title,
+
+              const SizedBox(height: 24),
+
+              Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      "Tarefas",
                       style: TextStyle(
-                        fontSize: 16,
+                        color: AppColors.textPrimary,
+                        fontSize: 20,
                         fontWeight: FontWeight.w600,
-                        color: isDone
-                            ? AppColors.textSecondary
-                            : AppColors.textPrimary,
-                        decoration: isDone
-                            ? TextDecoration.lineThrough
-                            : null,
                       ),
                     ),
-                    const SizedBox(height: 6),
-                    Text(
-                      task.description,
-                      style: TextStyle(
-                        fontSize: 13,
-                        height: 1.4,
-                        color: AppColors.textSecondary,
-                        decoration: isDone
-                            ? TextDecoration.lineThrough
-                            : null,
-                      ),
+                  ),
+                  Text(
+                    "$pendingTasks pendentes",
+                    style: const TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 13,
                     ),
-                    const SizedBox(height: 14),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
-                      ),
-                      decoration: BoxDecoration(
-                        color: task.state.color,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        task.state.label,
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: task.state.textColor,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              const SizedBox(width: 6),
-              const Icon(
-                Icons.chevron_right,
-                color: AppColors.textSecondary,
-                size: 20,
+
+              const SizedBox(height: 12),
+
+              Expanded(
+                child: visibleTasks.isEmpty
+                    ? const _EmptyTasks()
+                    : ListView.builder(
+                        itemCount: visibleTasks.length,
+                        itemBuilder: (context, index) {
+                          final task = visibleTasks[index];
+
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: 8,
+                            ),
+                            child: _TaskTile(
+                              task: task,
+                              onChanged: (value) {
+                                toggleTask(task, value);
+                              },
+                              onEdit: () {
+                                editTask(task);
+                              },
+                            ),
+                          );
+                        },
+                      ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TaskTile extends StatelessWidget {
+  final Task task;
+  final ValueChanged<bool?> onChanged;
+  final VoidCallback onEdit;
+
+  const _TaskTile({
+    required this.task,
+    required this.onChanged,
+    required this.onEdit,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: AppColors.divider,
+        ),
+      ),
+      child: CheckboxListTile(
+        value: task.completed,
+
+        onChanged: onChanged,
+
+        activeColor: AppColors.primary,
+        checkColor: AppColors.background,
+
+        controlAffinity: ListTileControlAffinity.leading,
+
+        contentPadding: const EdgeInsets.only(
+          left: 8,
+          right: 4,
+          top: 2,
+          bottom: 2,
+        ),
+
+        title: Text(
+          task.title,
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w500,
+            color: task.completed
+                ? AppColors.textSecondary
+                : AppColors.textPrimary,
+            decoration: task.completed
+                ? TextDecoration.lineThrough
+                : TextDecoration.none,
+            decorationColor: AppColors.textSecondary,
+          ),
+        ),
+
+        secondary: IconButton(
+          onPressed: onEdit,
+          icon: const Icon(
+            Icons.edit_outlined,
+            color: AppColors.primary,
+            size: 20,
           ),
         ),
       ),
@@ -516,26 +374,167 @@ class _EmptyTasks extends StatelessWidget {
         children: [
           Icon(
             Icons.check_circle_outline,
-            size: 56,
+            size: 60,
             color: AppColors.primary,
           ),
-          SizedBox(height: 16),
+          SizedBox(height: 14),
           Text(
-            "Nenhuma tarefa",
+            "Nenhuma tarefa cadastrada",
             style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
             ),
           ),
           SizedBox(height: 6),
           Text(
-            "Nada para mostrar nesse filtro.",
+            "Adicione uma tarefa acima.",
             style: TextStyle(
               color: AppColors.textSecondary,
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class TaskDialog extends StatefulWidget {
+  final Task task;
+
+  const TaskDialog({
+    super.key,
+    required this.task,
+  });
+
+  @override
+  State<TaskDialog> createState() => _TaskDialogState();
+}
+
+class _TaskDialogState extends State<TaskDialog> {
+  late final TextEditingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = TextEditingController(
+      text: widget.task.title,
+    );
+  }
+
+  void save() {
+    final title = controller.text.trim();
+
+    if (title.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "O texto da tarefa não pode ficar vazio.",
+          ),
+        ),
+      );
+
+      return;
+    }
+
+    Navigator.pop(
+      context,
+      widget.task.copyWith(
+        title: title,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: AppColors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Editar tarefa",
+              style: TextStyle(
+                color: AppColors.textPrimary,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+
+            const SizedBox(height: 18),
+
+            TextField(
+              controller: controller,
+              cursorColor: AppColors.primary,
+              autofocus: true,
+              style: const TextStyle(
+                color: AppColors.textPrimary,
+              ),
+              decoration: InputDecoration(
+                labelText: "Tarefa",
+                labelStyle: const TextStyle(
+                  color: AppColors.textSecondary,
+                ),
+                filled: true,
+                fillColor: AppColors.surfaceLight,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(
+                    color: AppColors.primary,
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    "Cancelar",
+                    style: TextStyle(
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(width: 8),
+
+                FilledButton(
+                  onPressed: save,
+                  style: FilledButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: AppColors.background,
+                  ),
+                  child: const Text(
+                    "Salvar",
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
