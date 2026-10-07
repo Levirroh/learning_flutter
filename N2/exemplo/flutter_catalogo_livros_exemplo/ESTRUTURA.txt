@@ -1,0 +1,25 @@
+flutter_catalogo_livros_exemplo/
+|-- pubspec.yaml
+|-- README.md
+|-- GUIA_DE_ESTUDO.md
+|-- docs/
+|   `-- MainActivity_exemplo.kt
+`-- lib/
+    |-- main.dart
+    |-- app.dart
+    |-- data/
+    |   `-- livros_iniciais.dart
+    |-- models/
+    |   `-- livro.dart
+    |-- screens/
+    |   |-- entrada_screen.dart
+    |   |-- home_screen.dart
+    |   |-- detalhes_livro_screen.dart
+    |   |-- novo_livro_screen.dart
+    |   |-- configuracoes_screen.dart
+    |   `-- ciclo_vida_screen.dart
+    |-- utils/
+    |   `-- categorias.dart
+    `-- widgets/
+        |-- cabecalho_catalogo.dart
+        `-- livro_card.dart
