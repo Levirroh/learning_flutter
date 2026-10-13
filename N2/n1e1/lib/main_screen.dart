@@ -19,15 +19,9 @@ class Task {
   final String title;
   final bool completed;
 
-  const Task({
-    required this.title,
-    this.completed = false,
-  });
+  const Task({required this.title, this.completed = false});
 
-  Task copyWith({
-    String? title,
-    bool? completed,
-  }) {
+  Task copyWith({String? title, bool? completed}) {
     return Task(
       title: title ?? this.title,
       completed: completed ?? this.completed,
@@ -74,22 +68,14 @@ class _MainScreenState extends State<MainScreen> {
 
     if (title.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Digite uma tarefa antes de adicionar.",
-          ),
-        ),
+        const SnackBar(content: Text("Digite uma tarefa antes de adicionar.")),
       );
 
       return;
     }
 
     setState(() {
-      tasks.add(
-        Task(
-          title: title,
-        ),
-      );
+      tasks.add(Task(title: title));
     });
 
     taskController.clear();
@@ -105,9 +91,7 @@ class _MainScreenState extends State<MainScreen> {
     }
 
     setState(() {
-      tasks[index] = task.copyWith(
-        completed: value ?? false,
-      );
+      tasks[index] = task.copyWith(completed: value ?? false);
     });
   }
 
@@ -115,9 +99,7 @@ class _MainScreenState extends State<MainScreen> {
     final editedTask = await showDialog<Task>(
       context: context,
       builder: (context) {
-        return TaskDialog(
-          task: task,
-        );
+        return TaskDialog(task: task);
       },
     );
 
@@ -155,9 +137,7 @@ class _MainScreenState extends State<MainScreen> {
         elevation: 0,
         title: const Text(
           "Minhas Tarefas",
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-          ),
+          style: TextStyle(fontWeight: FontWeight.w600),
         ),
       ),
 
@@ -170,18 +150,12 @@ class _MainScreenState extends State<MainScreen> {
               TextField(
                 controller: taskController,
                 cursorColor: AppColors.primary,
-                style: const TextStyle(
-                  color: AppColors.textPrimary,
-                ),
+                style: const TextStyle(color: AppColors.textPrimary),
                 decoration: InputDecoration(
                   labelText: "Nova tarefa",
                   hintText: "Ex: Estudar Flutter",
-                  labelStyle: const TextStyle(
-                    color: AppColors.textSecondary,
-                  ),
-                  hintStyle: const TextStyle(
-                    color: AppColors.textSecondary,
-                  ),
+                  labelStyle: const TextStyle(color: AppColors.textSecondary),
+                  hintStyle: const TextStyle(color: AppColors.textSecondary),
                   filled: true,
                   fillColor: AppColors.surface,
                   prefixIcon: const Icon(
@@ -190,15 +164,11 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: AppColors.divider,
-                    ),
+                    borderSide: const BorderSide(color: AppColors.divider),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: AppColors.divider,
-                    ),
+                    borderSide: const BorderSide(color: AppColors.divider),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -219,18 +189,12 @@ class _MainScreenState extends State<MainScreen> {
                 width: double.infinity,
                 child: FilledButton.icon(
                   onPressed: addTask,
-                  icon: const Icon(
-                    Icons.add,
-                  ),
-                  label: const Text(
-                    "Adicionar",
-                  ),
+                  icon: const Icon(Icons.add),
+                  label: const Text("Adicionar"),
                   style: FilledButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: AppColors.background,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 14,
-                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -273,9 +237,7 @@ class _MainScreenState extends State<MainScreen> {
                           final task = visibleTasks[index];
 
                           return Padding(
-                            padding: const EdgeInsets.only(
-                              bottom: 8,
-                            ),
+                            padding: const EdgeInsets.only(bottom: 8),
                             child: _TaskTile(
                               task: task,
                               onChanged: (value) {
@@ -310,13 +272,12 @@ class _TaskTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surface,
+    return Material(
+      color: AppColors.surface,
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppColors.divider,
-        ),
+        side: const BorderSide(color: AppColors.divider),
       ),
       child: CheckboxListTile(
         value: task.completed,
@@ -372,11 +333,7 @@ class _EmptyTasks extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            Icons.check_circle_outline,
-            size: 60,
-            color: AppColors.primary,
-          ),
+          Icon(Icons.check_circle_outline, size: 60, color: AppColors.primary),
           SizedBox(height: 14),
           Text(
             "Nenhuma tarefa cadastrada",
@@ -389,9 +346,7 @@ class _EmptyTasks extends StatelessWidget {
           SizedBox(height: 6),
           Text(
             "Adicione uma tarefa acima.",
-            style: TextStyle(
-              color: AppColors.textSecondary,
-            ),
+            style: TextStyle(color: AppColors.textSecondary),
           ),
         ],
       ),
@@ -402,10 +357,7 @@ class _EmptyTasks extends StatelessWidget {
 class TaskDialog extends StatefulWidget {
   final Task task;
 
-  const TaskDialog({
-    super.key,
-    required this.task,
-  });
+  const TaskDialog({super.key, required this.task});
 
   @override
   State<TaskDialog> createState() => _TaskDialogState();
@@ -418,9 +370,7 @@ class _TaskDialogState extends State<TaskDialog> {
   void initState() {
     super.initState();
 
-    controller = TextEditingController(
-      text: widget.task.title,
-    );
+    controller = TextEditingController(text: widget.task.title);
   }
 
   void save() {
@@ -429,21 +379,14 @@ class _TaskDialogState extends State<TaskDialog> {
     if (title.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text(
-            "O texto da tarefa não pode ficar vazio.",
-          ),
+          content: Text("O texto da tarefa não pode ficar vazio."),
         ),
       );
 
       return;
     }
 
-    Navigator.pop(
-      context,
-      widget.task.copyWith(
-        title: title,
-      ),
-    );
+    Navigator.pop(context, widget.task.copyWith(title: title));
   }
 
   @override
@@ -456,9 +399,7 @@ class _TaskDialogState extends State<TaskDialog> {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: AppColors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -480,14 +421,10 @@ class _TaskDialogState extends State<TaskDialog> {
               controller: controller,
               cursorColor: AppColors.primary,
               autofocus: true,
-              style: const TextStyle(
-                color: AppColors.textPrimary,
-              ),
+              style: const TextStyle(color: AppColors.textPrimary),
               decoration: InputDecoration(
                 labelText: "Tarefa",
-                labelStyle: const TextStyle(
-                  color: AppColors.textSecondary,
-                ),
+                labelStyle: const TextStyle(color: AppColors.textSecondary),
                 filled: true,
                 fillColor: AppColors.surfaceLight,
                 border: OutlineInputBorder(
@@ -495,9 +432,7 @@ class _TaskDialogState extends State<TaskDialog> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(
-                    color: AppColors.primary,
-                  ),
+                  borderSide: const BorderSide(color: AppColors.primary),
                 ),
               ),
             ),
@@ -513,9 +448,7 @@ class _TaskDialogState extends State<TaskDialog> {
                   },
                   child: const Text(
                     "Cancelar",
-                    style: TextStyle(
-                      color: AppColors.textSecondary,
-                    ),
+                    style: TextStyle(color: AppColors.textSecondary),
                   ),
                 ),
 
@@ -527,9 +460,7 @@ class _TaskDialogState extends State<TaskDialog> {
                     backgroundColor: AppColors.primary,
                     foregroundColor: AppColors.background,
                   ),
-                  child: const Text(
-                    "Salvar",
-                  ),
+                  child: const Text("Salvar"),
                 ),
               ],
             ),
