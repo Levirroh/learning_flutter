@@ -1,80 +1,55 @@
+import 'package:catalogo_produto/assets/lifecycle_history.dart';
 import 'package:catalogo_produto/classes/catalog_item.dart';
 import 'package:catalogo_produto/main_screen.dart';
 import 'package:flutter/material.dart';
 
-class ItemScreen extends StatefulWidget {
-  const ItemScreen({super.key, required this.item});
+class ItemScreen extends StatelessWidget {
+  const ItemScreen({super.key, required this.item, required this.history});
 
-  final CatalogItem item;
+  final Produto item;
+  final ValueNotifier<List<String>> history;
 
-  @override
-  State<ItemScreen> createState() => _ItemScreenState();
-}
-
-class _ItemScreenState extends State<ItemScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // floatingActionButton: Actions(actions: Navigator.pop(), child: Icon(Icons.add)),
       backgroundColor: AppColors.background,
       appBar: AppBar(
         foregroundColor: Colors.white,
         backgroundColor: AppColors.background,
         title: Container(
-          width: 150,
-          height: 40,
-          alignment: AlignmentGeometry.center,
-          padding: EdgeInsets.all(4),
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: widget.item.color,
+            color: item.color,
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Text(widget.item.name, style: TextStyle(color: Colors.black)),
+          child: Text(item.name, style: const TextStyle(color: Colors.black)),
         ),
       ),
-      body: Column(
+      body: ListView(
+        padding: const EdgeInsets.all(16),
         children: [
-          Padding(
-            padding: EdgeInsetsGeometry.all(8),
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.surfaceLight,
-                borderRadius: BorderRadius.circular(3),
-              ),
-              child: Padding(
-                padding: EdgeInsetsGeometry.all(8),
-                child: Text(
-                  widget.item.description,
-                  style: TextStyle(color: AppColors.textPrimary),
-                ),
-              ),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceLight,
+              borderRadius: BorderRadius.circular(3),
             ),
+            child: Text(item.description),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 50,
-            children: [
-              Text(
-                "Preço: R\$ ${widget.item.price.toString()}",
-                style: TextStyle(color: AppColors.textPrimary),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(),
-                child: Container(
-                  width: 2,
-                  height: 25,
-                  decoration: BoxDecoration(
-                    color: Colors.white12,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-              Text(
-                "Quantidade: ${widget.item.quantity.toString()}",
-                style: TextStyle(color: AppColors.textPrimary),
-              ),
-            ],
+          const SizedBox(height: 16),
+          Text(
+            "Preço: R\$ ${item.price.toStringAsFixed(2).replaceAll('.', ',')}",
           ),
+          const SizedBox(height: 8),
+          Text("Quantidade disponível: ${item.quantity}"),
+          const SizedBox(height: 16),
+          ElevatedButton.icon(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.arrow_back),
+            label: const Text("Voltar ao catálogo"),
+          ),
+          const SizedBox(height: 24),
+          LifecycleHistory(history: history),
         ],
       ),
     );
