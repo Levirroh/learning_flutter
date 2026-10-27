@@ -1,0 +1,14 @@
+{
+  "apk": {
+    "path": "build/app/outputs/flutter-apk/app-release.apk",
+    "size_bytes": 47034722,
+    "modified": "2026-10-20T19:08:35.817650-03:00",
+    "sha256": "48a7544e95e75d06014e56f4a7921a1fefba9255cc6b598facaa1c1b0ed7ebe1"
+  },
+  "aab": {
+    "path": "build/app/outputs/bundle/release/app-release.aab",
+    "size_bytes": 46659406,
+    "modified": "2026-10-20T19:08:55.115870-03:00",
+    "sha256": "2dac1dbd2b40824bef8c62e453957b3b871b94dc24e5ad68677b89efc676d26c"
+  }
+}

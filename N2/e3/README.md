@@ -24,14 +24,14 @@ Não foram adicionados pacotes externos. Os dados ficam em memória e são reini
 
 ## Organização
 
-- `lib/models/`: classe Evento.
+- `lib/models/`: classe Event.
 - `lib/data/`: categorias e eventos iniciais.
 - `lib/widgets/`: card reutilizável do evento.
 - `lib/screens/`: telas do aplicativo.
 - `GUIA_TODOS.md`: localização e conferência dos 12 itens da atividade.
 - `RELATORIO_MODELO.md`: esqueleto para preencher no Google Docs ou Word e exportar em PDF.
 
-Como o projeto base citado no enunciado não foi disponibilizado, este projeto foi criado do zero a pedido do estudante. Os 12 comportamentos foram implementados e identificados no código como `TODO_ATIVIDADE_XX concluído`.
+Como o projeto base citado no enunciado não foi disponibilizado, este projeto foi criado do zero a pedido do estudante. Os 12 comportamentos foram implementados e relacionados no GUIA_TODOS.md.
 
 ## Teste real no Android
 

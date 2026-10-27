@@ -1,0 +1,31 @@
+Launching lib\main.dart on sdk gphone16k x86 64 in debug mode...
+Running Gradle task 'assembleDebug'...                          
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by net.rubygrapefruit.platform.internal.NativeLibraryLoader in an unnamed module (file:/C:/Users/Pichau/.gradle/wrapper/dists/gradle-9.3.1-all/9ot9r568e8zfvvd4mn8rbu1j0/gradle-9.3.1/lib/native-platform-0.22-milestone-29.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+Running Gradle task 'assembleDebug'...                            172,5s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...          915ms
+I/FlutterActivityAndFragmentDelegate( 6966): If you are attempting to set --enable-dart-profiling via Intent extras to launch a Flutter component outside of using the Flutter CLI, note that support for setting engine flags on Android via Intent will soon be dropped; see https://github.com/flutter/flutter/issues/180686 for more information on this breaking change. To migrate, set --enable-dart-profiling or any other flags specified via Intent extras on the command line instead or see https://github.com/flutter/flutter/blob/main/docs/engine/Flutter-Android-Engine-Flags.md for alternative methods.
+D/FlutterJNI( 6966): Beginning load of flutter...
+D/FlutterJNI( 6966): flutter (null) was loaded normally!
+I/flutter ( 6966): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+D/FlutterRenderer( 6966): Width is zero. 0,0
+I/Choreographer( 6966): Skipped 154 frames!  The application may be doing too much work on its main thread.
+D/WindowOnBackDispatcher( 6966): setTopOnBackInvokedCallback (unwrapped): android.app.Activity$$ExternalSyntheticLambda0@c3e300d
+D/WindowOnBackDispatcher( 6966): setOnBackInvokedCallbackInfo: android.app.Activity$$ExternalSyntheticLambda0@c3e300d
+D/ProfileInstaller( 6966): Installing profile for com.example.calculadora_desconto
+Syncing files to device sdk gphone16k x86 64...                 
+I/WindowExtensionsImpl( 6966): Initializing Window Extensions, vendor API level=10, activity embedding enabled=true
+W/UiContextUtils( 6966): Requested context is a non-UI Context. Creating a UI-Context with display: 0. Context: Context=android.app.Application@b6d59e4, of which baseContext=android.app.ContextImpl@d444b17
+I/ladora_desconto( 6966): Compiler allocated 5567KB to compile void android.view.ViewRootImpl.performTraversals(long)
+D/VRI[MainActivity]( 6966): WindowInsets changed: 1080x2400 statusBars:[0,132,0,0] navigationBars:[0,0,0,63] mandatorySystemGestures:[0,164,0,84] 
+D/FlutterRenderer( 6966): Width is zero. 0,0
+I/Surface ( 6966): Creating surface for consumer unnamed-6966-0 with slotExpansion=1 for 64 slots
+I/Surface ( 6966): Creating surface for consumer VRI[MainActivity]#0(BLAST Consumer)0 with slotExpansion=1 for 64 slots
+D/FlutterJNI( 6966): Sending viewport metrics to the engine.
+Syncing files to device sdk gphone16k x86 64...                    144ms
+I/Surface ( 6966): Creating surface for consumer unnamed-6966-1 with slotExpansion=1 for 64 slots
+I/Surface ( 6966): Creating surface for consumer bd4f6e9 SurfaceView[com.example.calculadora_desconto/com.example.calculadora_desconto.MainActivity]#1(BLAST Consumer)1 with slotExpansion=1 for 64 slots

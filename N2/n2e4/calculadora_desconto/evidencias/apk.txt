@@ -1,0 +1,16 @@
+Comando: flutter build apk --release
+
+Running Gradle task 'assembleRelease'...                        
+Running Gradle task 'assembleRelease'...                          215,1s
+√ Built build\app\outputs\flutter-apk\app-release.apk (44.9MB)
+
+Arquivo verificado no disco:
+build/app/outputs/flutter-apk/app-release.apk
+
+Tamanho: 47,034,722 bytes
+Modificado em: 2026-10-20T19:08:35.817650-03:00
+
+SHA-256:
+48a7544e95e75d06014e56f4a7921a1fefba9255cc6b598facaa1c1b0ed7ebe1
+
+Estrutura APK e integridade ZIP verificadas.

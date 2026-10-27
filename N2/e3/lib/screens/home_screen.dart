@@ -1,77 +1,73 @@
 import 'package:flutter/material.dart';
-import 'package:agenda_eventos/data/eventos_iniciais.dart';
-import 'package:agenda_eventos/models/evento.dart';
-import 'package:agenda_eventos/screens/ciclo_vida_screen.dart';
-import 'package:agenda_eventos/screens/configuracoes_screen.dart';
-import 'package:agenda_eventos/screens/detalhes_evento_screen.dart';
-import 'package:agenda_eventos/screens/entrada_screen.dart';
-import 'package:agenda_eventos/screens/novo_evento_screen.dart';
-import 'package:agenda_eventos/widgets/evento_card.dart';
+import 'package:agenda_eventos/data/initial_events.dart';
+import 'package:agenda_eventos/models/event.dart';
+import 'package:agenda_eventos/screens/lifecycle_screen.dart';
+import 'package:agenda_eventos/screens/settings_screen.dart';
+import 'package:agenda_eventos/screens/event_details_screen.dart';
+import 'package:agenda_eventos/screens/entry_screen.dart';
+import 'package:agenda_eventos/screens/new_event_screen.dart';
+import 'package:agenda_eventos/widgets/event_card.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key, required this.nome});
+  const HomeScreen({super.key, required this.name});
 
-  final String nome;
+  final String name;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final List<Evento> _eventos = criarEventosIniciais();
-  String _busca = "";
-  String _categoria = "Todos";
-  bool _somenteInscritos = false;
-  bool _notificacoes = true;
-  bool _modoCompacto = false;
+  final List<Event> events = createInitialEvents();
+  String search = "";
+  String selectedCategory = "Todos";
+  bool onlyRegistered = false;
+  bool notifications = true;
+  bool compactMode = false;
 
-  // TODO_ATIVIDADE_01 concluído: os três critérios são combinados.
-  List<Evento> get _eventosFiltrados {
-    final busca = _busca.trim().toLowerCase();
-    return _eventos.where((evento) {
-      final correspondeBusca =
-          evento.titulo.toLowerCase().contains(busca) ||
-          evento.local.toLowerCase().contains(busca);
-      final correspondeCategoria =
-          _categoria == "Todos" || evento.categoria == _categoria;
-      final correspondeInscricao = !_somenteInscritos || evento.inscrito;
-      return correspondeBusca && correspondeCategoria && correspondeInscricao;
+  List<Event> get filteredEvents {
+    final query = search.trim().toLowerCase();
+    return events.where((event) {
+      final matchesSearch =
+          event.title.toLowerCase().contains(query) ||
+          event.location.toLowerCase().contains(query);
+      final matchesCategory =
+          selectedCategory == "Todos" || event.category == selectedCategory;
+      final matchesRegistration = !onlyRegistered || event.registered;
+      return matchesSearch && matchesCategory && matchesRegistration;
     }).toList();
   }
 
-  // TODO_ATIVIDADE_02 concluído.
-  Future<void> _abrirDetalhes(Evento evento) async {
-    final excluir = await Navigator.push<bool>(
+  Future<void> openDetails(Event event) async {
+    final deleteEvent = await Navigator.push<bool>(
       context,
       MaterialPageRoute<bool>(
-        builder: (context) => DetalhesEventoScreen(evento: evento),
+        builder: (context) => EventDetailsScreen(event: event),
       ),
     );
     if (!mounted) return;
     setState(() {
-      if (excluir == true) _eventos.remove(evento);
+      if (deleteEvent == true) events.remove(event);
     });
-    if (excluir == true) {
+    if (deleteEvent == true) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("${evento.titulo} excluído")));
+          .showSnackBar(SnackBar(content: Text("${event.title} excluído")));
     }
   }
 
-  // TODO_ATIVIDADE_03 concluído.
-  Future<void> _novoEvento() async {
-    final evento = await Navigator.push<Evento>(
+  Future<void> addEvent() async {
+    final event = await Navigator.push<Event>(
       context,
-      MaterialPageRoute<Evento>(builder: (context) => const NovoEventoScreen()),
+      MaterialPageRoute<Event>(builder: (context) => const NewEventScreen()),
     );
-    if (!mounted || evento == null) return;
-    setState(() => _eventos.add(evento));
+    if (!mounted || event == null) return;
+    setState(() => events.add(event));
     ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text("${evento.titulo} cadastrado")));
+        .showSnackBar(SnackBar(content: Text("${event.title} cadastrado")));
   }
 
-  // TODO_ATIVIDADE_04 concluído: a entrada passa a ser a única rota.
-  Future<void> _sair() async {
-    final confirmar = await showDialog<bool>(
+  Future<void> logout() async {
+    final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Sair da agenda?"),
@@ -88,41 +84,41 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
-    if (!mounted || confirmar != true) return;
+    if (!mounted || confirm != true) return;
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute<void>(builder: (context) => const EntradaScreen()),
+      MaterialPageRoute<void>(builder: (context) => const EntryScreen()),
       (route) => false,
     );
   }
 
-  Future<void> _configuracoes() async {
-    final resultado = await Navigator.push<Map<String, bool>>(
+  Future<void> openSettings() async {
+    final result = await Navigator.push<Map<String, bool>>(
       context,
       MaterialPageRoute<Map<String, bool>>(
-        builder: (context) => ConfiguracoesScreen(
-          notificacoes: _notificacoes,
-          modoCompacto: _modoCompacto,
+        builder: (context) => SettingsScreen(
+          notifications: notifications,
+          compactMode: compactMode,
         ),
       ),
     );
-    if (!mounted || resultado == null) return;
+    if (!mounted || result == null) return;
     setState(() {
-      _notificacoes = resultado['notificacoes']!;
-      _modoCompacto = resultado['modoCompacto']!;
+      notifications = result['notificacoes']!;
+      compactMode = result['modoCompacto']!;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final eventos = _eventosFiltrados;
+    final visibleEvents = filteredEvents;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Agenda"),
         actions: [
           IconButton(
             tooltip: "Configurações",
-            onPressed: _configuracoes,
+            onPressed: openSettings,
             icon: const Icon(Icons.settings),
           ),
           IconButton(
@@ -130,28 +126,28 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute<void>(
-                builder: (context) => const CicloVidaScreen(),
+                builder: (context) => const LifecycleScreen(),
               ),
             ),
             icon: const Icon(Icons.history),
           ),
           IconButton(
             tooltip: "Sair",
-            onPressed: _sair,
+            onPressed: logout,
             icon: const Icon(Icons.logout),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         tooltip: "Novo evento",
-        onPressed: _novoEvento,
+        onPressed: addEvent,
         child: const Icon(Icons.add),
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 88),
         children: [
-          Text("Olá, ${widget.nome}!", style: const TextStyle(fontSize: 22)),
-          Text("Notificações: ${_notificacoes ? 'ativadas' : 'desativadas'}"),
+          Text("Olá, ${widget.name}!", style: const TextStyle(fontSize: 22)),
+          Text("Notificações: ${notifications ? 'ativadas' : 'desativadas'}"),
           const SizedBox(height: 16),
           TextField(
             decoration: const InputDecoration(
@@ -159,41 +155,41 @@ class _HomeScreenState extends State<HomeScreen> {
               prefixIcon: Icon(Icons.search),
               border: OutlineInputBorder(),
             ),
-            onChanged: (value) => setState(() => _busca = value),
+            onChanged: (value) => setState(() => search = value),
           ),
           const SizedBox(height: 12),
           Wrap(
             spacing: 8,
-            // TODO_ATIVIDADE_05 concluído.
-            children: categorias.map((categoria) {
+
+            children: categories.map((category) {
               return FilterChip(
-                label: Text(categoria),
-                selected: _categoria == categoria,
-                onSelected: (_) => setState(() => _categoria = categoria),
+                label: Text(category),
+                selected: selectedCategory == category,
+                onSelected: (_) => setState(() => selectedCategory = category),
               );
             }).toList(),
           ),
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
             title: const Text("Mostrar somente minhas inscrições"),
-            value: _somenteInscritos,
-            onChanged: (value) => setState(() => _somenteInscritos = value),
+            value: onlyRegistered,
+            onChanged: (value) => setState(() => onlyRegistered = value),
           ),
-          Text("${eventos.length} evento(s) encontrado(s)"),
+          Text("${visibleEvents.length} evento(s) encontrado(s)"),
           const SizedBox(height: 12),
-          if (eventos.isEmpty)
+          if (visibleEvents.isEmpty)
             const Padding(
               padding: EdgeInsets.all(24),
               child: Text("Nenhum evento encontrado."),
             ),
-          ...eventos.map(
-            (evento) => EventoCard(
-              evento: evento,
-              compacto: _modoCompacto,
-              onDetalhes: () => _abrirDetalhes(evento),
-              // TODO_ATIVIDADE_06 concluído.
-              onInscricao: () =>
-                  setState(() => evento.inscrito = !evento.inscrito),
+          ...visibleEvents.map(
+            (event) => EventCard(
+              event: event,
+              compact: compactMode,
+              onDetails: () => openDetails(event),
+
+              onRegistrationToggle: () =>
+                  setState(() => event.registered = !event.registered),
             ),
           ),
         ],

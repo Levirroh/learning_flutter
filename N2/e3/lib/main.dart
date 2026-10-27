@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:agenda_eventos/app_colors.dart';
-import 'package:agenda_eventos/screens/entrada_screen.dart';
+import 'package:agenda_eventos/screens/entry_screen.dart';
 
 void main() {
   runApp(const MainApp());
@@ -27,7 +27,7 @@ class MainApp extends StatelessWidget {
           foregroundColor: AppColors.textPrimary,
         ),
       ),
-      home: const EntradaScreen(),
+      home: const EntryScreen(),
     );
   }
 }

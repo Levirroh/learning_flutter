@@ -1,0 +1,7 @@
+Comando: flutter test --reporter expanded
+00:00 +0: loading C:/Users/Pichau/Desktop/facul/learning_flutter/N2/n2e4/calculadora_desconto/test/discount_calculator_test.dart
+00:00 +0: C:/Users/Pichau/Desktop/facul/learning_flutter/N2/n2e4/calculadora_desconto/test/discount_calculator_test.dart: DiscountCalculator 10% de desconto em R$ 100
+00:00 +1: C:/Users/Pichau/Desktop/facul/learning_flutter/N2/n2e4/calculadora_desconto/test/discount_calculator_test.dart: DiscountCalculator 25% de desconto em R$ 200
+00:00 +2: C:/Users/Pichau/Desktop/facul/learning_flutter/N2/n2e4/calculadora_desconto/test/discount_calculator_test.dart: DiscountCalculator 0% de desconto em R$ 50
+00:00 +3: C:/Users/Pichau/Desktop/facul/learning_flutter/N2/n2e4/calculadora_desconto/test/widget_test.dart: Calcula desconto pela interface
+00:01 +4: All tests passed!

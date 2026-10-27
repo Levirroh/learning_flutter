@@ -1,0 +1,16 @@
+Comando: flutter build appbundle
+
+Running Gradle task 'bundleRelease'...                          
+Running Gradle task 'bundleRelease'...                             16,7s
+√ Built build\app\outputs\bundle\release\app-release.aab (44.5MB)
+
+Arquivo verificado no disco:
+build/app/outputs/bundle/release/app-release.aab
+
+Tamanho: 46,659,406 bytes
+Modificado em: 2026-10-20T19:08:55.115870-03:00
+
+SHA-256:
+2dac1dbd2b40824bef8c62e453957b3b871b94dc24e5ad68677b89efc676d26c
+
+Estrutura AAB e integridade ZIP verificadas.

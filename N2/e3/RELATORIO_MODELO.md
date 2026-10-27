@@ -34,7 +34,7 @@ Turma e data: [preencher]
 
 [Insira uma captura com os dados de um evento e os botões.]
 
-[Explique como Navigator.push e MaterialPageRoute enviam o objeto Evento, como a inscrição altera o mesmo objeto e como pop retorna true na exclusão. Conte o resultado dos testes de cancelar e confirmar a exclusão.]
+[Explique como Navigator.push e MaterialPageRoute enviam o objeto Event, como a inscrição altera o mesmo objeto e como pop retorna true na exclusão. Conte o resultado dos testes de cancelar e confirmar a exclusão.]
 
 [Explique que a saída confirmada usa pushAndRemoveUntil para remover as rotas anteriores e retornar à entrada.]
 
@@ -44,7 +44,7 @@ Turma e data: [preencher]
 
 [Insira uma captura do formulário preenchido. Se possível, acrescente uma imagem da validação ou do carregamento.]
 
-[Descreva os campos, a validação, a espera de 600 ms com indicador e o retorno de um Evento por Navigator.pop. Explique como a Home adiciona esse objeto à lista.]
+[Descreva os campos, a validação, a espera de 600 ms com indicador e o retorno de um Event por Navigator.pop. Explique como a Home adiciona esse objeto à lista.]
 
 ## 6. Configurações e Map
 
