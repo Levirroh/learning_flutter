@@ -1,6 +1,9 @@
 # N2 E4 — Calculadora de Desconto
 
 Estudante: Johann Gossen Ruth
+Matrícula: 130059
+Disciplina e turma: Desenvolvimento de Dispositivos Móveis 4A
+Professor: Diego Sauter Possamai
 
 Projeto criado a partir do ZIP fornecido pelo professor. Os arquivos `lib/main.dart` e `lib/discount_calculator.dart` foram preservados. Foram completados os três testes unitários e o teste de widget.
 
@@ -33,7 +36,7 @@ flutter build apk --release
 flutter build appbundle
 ```
 
-Arquivos gerados e incluídos no ZIP:
+Builds de 20/10/2026, disponíveis nos caminhos abaixo e conferidos pelos SHA-256 de evidencias/arquivos.json:
 
 - `build/app/outputs/flutter-apk/app-release.apk`
 - `build/app/outputs/bundle/release/app-release.aab`
