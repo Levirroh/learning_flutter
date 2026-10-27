@@ -1,6 +1,6 @@
 # Catálogo de Jogos
 
-Integrantes: [preencher os nomes completos]
+Integrantes: Johann Gossen Ruth
 
 Catálogo simples de jogos de tabuleiro feito em Flutter. Os produtos ficam no código, sem banco de dados. Inclui detalhes dos jogos, transformações de listas e histórico do ciclo de vida.
 
