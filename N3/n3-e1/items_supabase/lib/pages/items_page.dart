@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ItemsPage extends StatefulWidget {
-  const ItemsPage({super.key, required this.username});
+  const ItemsPage({super.key, required this.email});
 
-  final String username;
+  final String email;
 
   @override
   State<ItemsPage> createState() => _ItemsPageState();
