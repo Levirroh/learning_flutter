@@ -1,5 +1,5 @@
+
 import 'package:flutter/material.dart';
-import 'package:items_supabase/main.dart';
 import 'package:items_supabase/pages/items_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -13,7 +13,11 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _isLogin = false;
+
+  final supabase = Supabase.instance.client;
+
+  bool _isLogin = true;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -22,9 +26,44 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  Future<void> _entrar() async {
+  void _mostrarMensagem(String mensagem) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(mensagem)),
+    );
+  }
+
+  bool _validarCampos() {
     final email = _emailController.text.trim();
     final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      _mostrarMensagem('Preencha o e-mail e a senha.');
+      return false;
+    }
+
+    if (!email.contains('@')) {
+      _mostrarMensagem('Digite um e-mail válido.');
+      return false;
+    }
+
+    return true;
+  }
+
+  void _abrirLista(String email) {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute<void>(
+        builder: (_) => ItemsPage(email: email),
+      ),
+    );
+  }
+
+  Future<void> _entrar() async {
+    if (_isLoading || !_validarCampos()) return;
+
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    setState(() => _isLoading = true);
 
     try {
       final response = await supabase.auth.signInWithPassword(
@@ -35,160 +74,218 @@ class _LoginPageState extends State<LoginPage> {
       if (!mounted) return;
 
       if (response.session != null) {
-        Navigator.of(context).push(
-          MaterialPageRoute<void>(builder: (_) => ItemsPage(email: email)),
-        );
+        _abrirLista(response.user?.email ?? email);
+      } else {
+        _mostrarMensagem('Não foi possível iniciar a sessão.');
       }
-    } on AuthException {
+    } on AuthException catch (error) {
       if (!mounted) return;
 
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Falha ao realizar login.')));
+      if (error.code == 'email_not_confirmed') {
+        _mostrarMensagem('Confirme seu e-mail antes de entrar.');
+      } else {
+        _mostrarMensagem('Falha no login: ${error.message}');
+      }
+    } catch (error) {
+      if (!mounted) return;
+      _mostrarMensagem('Erro inesperado ao realizar login.');
+      debugPrint('Erro de login: $error');
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 
-  Future<bool> _signUp() async {
+  Future<void> _signUp() async {
+    if (_isLoading || !_validarCampos()) return;
+
     final email = _emailController.text.trim();
     final password = _passwordController.text;
 
+    setState(() => _isLoading = true);
+
     try {
-      if (email.isEmpty || password.isEmpty) {
-        if (!mounted) return false;
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Usuário ou senha inválidos.')),
-        );
-        return false;
-      }
-
       final response = await supabase.auth.signUp(
         email: email,
         password: password,
       );
 
-      if (!mounted) return false;
+      if (!mounted) return;
 
       if (response.session != null) {
-        return true;
+        // Cadastro realizado com sessão ativa.
+        _abrirLista(response.user?.email ?? email);
+      } else {
+        // Pode ser necessário confirmar o e-mail.
+        _mostrarMensagem(
+          'Verifique seu e-mail para confirmar o cadastro.',
+        );
+
+        _passwordController.clear();
+
+        setState(() {
+          _isLogin = true;
+        });
       }
+    } on AuthException catch (error) {
+      if (!mounted) return;
 
-      return false;
-    } on AuthException {
-      if (!mounted) return false;
-
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Falha ao realizar login.')));
-      return false;
+      _mostrarMensagem('Falha no cadastro: ${error.message}');
+    } catch (error) {
+      if (!mounted) return;
+      _mostrarMensagem('Erro inesperado ao criar conta.');
+      debugPrint('Erro de cadastro: $error');
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
+  }
+
+  void _alternarModo() {
+    if (_isLoading) return;
+
+    _passwordController.clear();
+
+    setState(() {
+      _isLogin = !_isLogin;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(_isLogin ? 'Entrar' : 'Criar conta')),
-      body: _isLogin
-          ? SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
+      appBar: AppBar(
+        title: Text(_isLogin ? 'Entrar' : 'Criar conta'),
+      ),
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 420),
+              child: AutofillGroup(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    const SizedBox(height: 20),
+                    const Icon(
+                      Icons.account_circle_outlined,
+                      size: 72,
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    Text(
+                      _isLogin ? 'Bem-vindo!' : 'Crie sua conta',
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    Text(
+                      _isLogin
+                          ? 'Entre para acessar seus itens.'
+                          : 'Cadastre-se para começar.',
+                      textAlign: TextAlign.center,
+                    ),
+
+                    const SizedBox(height: 32),
+
+                    // E-mail
                     TextField(
                       controller: _emailController,
+                      enabled: !_isLoading,
+                      keyboardType: TextInputType.emailAddress,
+                      textCapitalization: TextCapitalization.none,
+                      textInputAction: TextInputAction.next,
+                      autofillHints: const [AutofillHints.email],
+                      autocorrect: false,
                       decoration: const InputDecoration(
-                        labelText: 'Email',
+                        labelText: 'E-mail',
                         border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.person),
+                        prefixIcon: Icon(Icons.email_outlined),
                       ),
-                      onSubmitted: (_) => _entrar(),
+                      onSubmitted: (_) {
+                        FocusScope.of(context).nextFocus();
+                      },
                     ),
+
                     const SizedBox(height: 20),
+
+                    // Senha
                     TextField(
                       controller: _passwordController,
+                      enabled: !_isLoading,
+                      obscureText: true,
+                      autocorrect: false,
+                      enableSuggestions: false,
+                      textInputAction: TextInputAction.done,
+                      autofillHints: [
+                        _isLogin
+                            ? AutofillHints.password
+                            : AutofillHints.newPassword,
+                      ],
                       decoration: const InputDecoration(
                         labelText: 'Senha',
                         border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.person),
+                        prefixIcon: Icon(Icons.lock_outline),
                       ),
-                      onSubmitted: (_) => _entrar(),
+                      onSubmitted: (_) {
+                        if (_isLogin) {
+                          _entrar();
+                        } else {
+                          _signUp();
+                        }
+                      },
                     ),
-                    const SizedBox(height: 16),
+
+                    const SizedBox(height: 24),
+
+                    // Botão principal
                     SizedBox(
                       width: double.infinity,
                       child: FilledButton(
-                        onPressed: _entrar,
-                        child: const Text('Entrar'),
+                        onPressed: _isLoading
+                            ? null
+                            : (_isLogin ? _entrar : _signUp),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 12,
+                          ),
+                          child: _isLoading
+                              ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : Text(
+                                  _isLogin ? 'Entrar' : 'Criar conta',
+                                ),
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    SizedBox(
-                      width: double.infinity,
-                      child: TextButton(
-                        onPressed: () {
-                          setState(() {
-                            _isLogin = false;
-                          });
-                        },
-                        child: const Text('Criar conta'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
-          : SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 20),
-                    TextField(
-                      controller: _emailController,
-                      decoration: const InputDecoration(
-                        labelText: 'Digite seu e-mail',
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.person),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    TextField(
-                      controller: _passwordController,
-                      decoration: const InputDecoration(
-                        labelText: 'Digite sua senha',
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.person),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      width: double.infinity,
-                      child: FilledButton(
-                        onPressed: () async {
-                          await _signUp();
-                        },
-                        child: const Text('Criar conta'),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    SizedBox(
-                      width: double.infinity,
-                      child: TextButton(
-                        onPressed: () {
-                          setState(() {
-                            _isLogin = true;
-                          });
-                        },
-                        child: const Text('Já possuo uma conta'),
+
+                    const SizedBox(height: 12),
+
+                    // Alternar entre login e cadastro
+                    TextButton(
+                      onPressed: _isLoading ? null : _alternarModo,
+                      child: Text(
+                        _isLogin
+                            ? 'Não possui conta? Cadastre-se'
+                            : 'Já possui uma conta? Entrar',
                       ),
                     ),
                   ],
                 ),
               ),
             ),
+          ),
+        ),
+      ),
     );
   }
 }
