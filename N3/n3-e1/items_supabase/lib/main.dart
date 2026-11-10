@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:items_supabase/pages/login_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: Scaffold(body: Center(child: Text('Hello World!'))),
+      home: LoginPage(),
     );
   }
 }
