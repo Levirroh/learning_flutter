@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
-
 class Item {
-  final String id;
+  final int id;
   final String name;
-  final Color userId;
-  final double createdAt;
+  final String userId;
+  final DateTime createdAt;
 
   const Item({
     required this.name,
