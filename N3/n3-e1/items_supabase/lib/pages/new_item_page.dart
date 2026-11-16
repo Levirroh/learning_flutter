@@ -2,16 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:items_supabase/models/item.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class NewItemPage extends StatefulWidget {
-  const NewItemPage({super.key});
+class ItemFormPageState extends StatefulWidget {
+  const ItemFormPageState({super.key, this.item, required this.isEdit});
+
+  final Item? item;
+  final bool isEdit;
 
   @override
-  State<NewItemPage> createState() => _NewItemScreenPageState();
+  State<ItemFormPageState> createState() => _ItemFormPageState();
 }
 
-class _NewItemScreenPageState extends State<NewItemPage> {
+class _ItemFormPageState extends State<ItemFormPageState> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
+
+  Item? get item => widget.item;
+  bool get isEdit => widget.isEdit;
 
   final supabase = Supabase.instance.client;
 
@@ -42,7 +48,7 @@ class _NewItemScreenPageState extends State<NewItemPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Novo Item')),
+      appBar: AppBar(title: Text(isEdit ? 'Editar Item' : 'Adicionar Item')),
       body: SafeArea(
         child: Form(
           key: _formKey,
@@ -68,7 +74,7 @@ class _NewItemScreenPageState extends State<NewItemPage> {
               FilledButton.icon(
                 onPressed: _salvando ? null : _salvar,
                 icon: const Icon(Icons.save),
-                label: const Text('Salvar evento'),
+                label: Text(isEdit ? 'Atualizar Evento' : 'Salvar evento'),
               ),
             ],
           ),

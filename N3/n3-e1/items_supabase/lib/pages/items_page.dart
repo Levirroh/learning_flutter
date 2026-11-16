@@ -43,15 +43,17 @@ class _ItemsPageState extends State<ItemsPage> {
   Future<void> _addItem() async {
     final item = await Navigator.push<Item>(
       context,
-      MaterialPageRoute<Item>(builder: (_) => const NewItemPage()),
+      MaterialPageRoute<Item>(
+        builder: (_) => const ItemFormPageState(isEdit: false),
+      ),
     );
     if (!mounted || item == null) return;
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text('${item.name} cadastrado.')));
-    _saveItem(item);
+    _saveAddItem(item);
   }
 
-  Future<void> _saveItem(Item item) async {
+  Future<void> _saveAddItem(Item item) async {
     final response = await supabase
         .from('items')
         .insert({'name': item.name, 'user_id': user!.id})
@@ -86,6 +88,8 @@ class _ItemsPageState extends State<ItemsPage> {
                   userId: item.userId,
                   createdAt: item.createdAt,
                 ),
+                onEdit: () {},
+                onDelete: () {},
               );
             }).toList(),
           ),
