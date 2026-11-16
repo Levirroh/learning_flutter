@@ -31,7 +31,7 @@ class _NewItemScreenPageState extends State<NewItemPage> {
     await Future<void>.delayed(const Duration(milliseconds: 600));
     if (!mounted) return;
     final item = Item(
-      id: DateTime.now().microsecondsSinceEpoch,
+      id: "",
       name: _nameController.text.trim(),
       createdAt: DateTime.now(),
       userId: user!.id,

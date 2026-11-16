@@ -27,12 +27,17 @@ class _ItemsPageState extends State<ItemsPage> {
   }
 
   Future<void> _loadItems() async {
-    items =
-        (await supabase
-                .from('items')
-                .select('id, name, user_id, created_at')
-                .order('created_at', ascending: false))
-            .cast<Item>();
+    final response = await supabase
+        .from('items')
+        .select('id, name, user_id, created_at')
+        .eq('user_id', user!.id)
+        .order('created_at', ascending: false);
+
+    if (!mounted) return;
+
+    setState(() {
+      items = response.map((row) => Item.fromJson(row)).toList();
+    });
   }
 
   Future<void> _addItem() async {
@@ -41,10 +46,23 @@ class _ItemsPageState extends State<ItemsPage> {
       MaterialPageRoute<Item>(builder: (_) => const NewItemPage()),
     );
     if (!mounted || item == null) return;
-    setState(() => items.add(item));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('${item.name} cadastrado.')),
-    );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text('${item.name} cadastrado.')));
+    _saveItem(item);
+  }
+
+  Future<void> _saveItem(Item item) async {
+    final response = await supabase
+        .from('items')
+        .insert({'name': item.name, 'user_id': user!.id})
+        .select()
+        .single();
+
+    if (!mounted) return;
+
+    setState(() {
+      items.insert(0, Item.fromJson(response));
+    });
   }
 
   @override

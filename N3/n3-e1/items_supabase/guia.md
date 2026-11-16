@@ -22,24 +22,24 @@ Marque os itens conforme avançar.
 
 ### Backend (Supabase)
 
-- [ ] Criar um projeto no Supabase.
-- [ ] Obter a **Project URL** e a **publishable key**.
-- [ ] Criar a tabela `public.items` com as colunas definidas no material.
-- [ ] Habilitar **Row Level Security (RLS)** na tabela.
-- [ ] Configurar permissões `GRANT` / `REVOKE`.
-- [ ] Criar políticas RLS para `SELECT`, `INSERT`, `UPDATE` e `DELETE`.
+- [x] Criar um projeto no Supabase.
+- [x] Obter a **Project URL** e a **publishable key**.
+- [x] Criar a tabela `public.items` com as colunas definidas no material.
+- [x] Habilitar **Row Level Security (RLS)** na tabela.
+- [x] Configurar permissões `GRANT` / `REVOKE`.
+- [x] Criar políticas RLS para `SELECT`, `INSERT`, `UPDATE` e `DELETE`.
 - [ ] Verificar a configuração de autenticação por e-mail.
 - [ ] Confirmar que a tabela pode ser acessada pela Data API, quando necessário.
 
 ### Flutter
 
-- [ ] Instalar o pacote `supabase_flutter`.
-- [ ] Configurar a URL e a publishable key do projeto.
-- [ ] Inicializar o Supabase **antes** de `runApp`.
-- [ ] Criar interface para cadastro de usuário.
-- [ ] Criar interface para login.
+- [x] Instalar o pacote `supabase_flutter`.
+- [x] Configurar a URL e a publishable key do projeto.
+- [x] Inicializar o Supabase **antes** de `runApp`.
+- [x] Criar interface para cadastro de usuário.
+- [x] Criar interface para login.
 - [ ] Implementar logout.
-- [ ] Identificar a conta autenticada (`currentUser`).
+- [x] Identificar a conta autenticada (`currentUser`).
 - [ ] Listar os itens do usuário conectado.
 - [ ] Adicionar novos itens.
 - [ ] Editar o nome de itens existentes.
