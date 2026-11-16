@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:items_supabase/models/item.dart';
+import 'package:items_supabase/pages/new_item_page.dart';
 import 'package:items_supabase/widgets/evento_card.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -14,7 +15,10 @@ class ItemsPage extends StatefulWidget {
 
 class _ItemsPageState extends State<ItemsPage> {
   List<Item> items = [];
+
   final supabase = Supabase.instance.client;
+
+  late final user = supabase.auth.currentUser;
 
   @override
   void initState() {
@@ -31,8 +35,16 @@ class _ItemsPageState extends State<ItemsPage> {
             .cast<Item>();
   }
 
-  void _addItem(){
-
+  Future<void> _addItem() async {
+    final item = await Navigator.push<Item>(
+      context,
+      MaterialPageRoute<Item>(builder: (_) => const NewItemPage()),
+    );
+    if (!mounted || item == null) return;
+    setState(() => items.add(item));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('${item.name} cadastrado.')),
+    );
   }
 
   @override
