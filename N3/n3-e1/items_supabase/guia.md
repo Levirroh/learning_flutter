@@ -40,11 +40,11 @@ Marque os itens conforme avançar.
 - [x] Criar interface para login.
 - [ ] Implementar logout.
 - [x] Identificar a conta autenticada (`currentUser`).
-- [ ] Listar os itens do usuário conectado.
-- [ ] Adicionar novos itens.
+- [x] Listar os itens do usuário conectado.
+- [x] Adicionar novos itens.
 - [ ] Editar o nome de itens existentes.
 - [ ] Excluir itens.
-- [ ] Exibir carregamento e mensagens de erro nas operações remotas.
+- [x] Exibir carregamento e mensagens de erro nas operações remotas.
 - [ ] Atualizar a interface quando as operações forem concluídas.
 
 ### Testes finais
